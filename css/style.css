@@ -23,6 +23,15 @@
     justify-content: space-between;
     flex-wrap: wrap;
   }
+  .input_box{
+    max-width: 1270px;
+    margin: 0 auto;
+    padding: 50px 10px;
+  }
+  .country_input{
+    padding: 20px;
+    font-size: 20px;
+  }
   
   html,
   body {
@@ -136,9 +145,9 @@
   
   article.card .infos .flag img{
     position: absolute;
-    top: 50%;
+    top: 0;
     right: 0;
-    width: 45px;
+    width: 80px;
     height: auto;
   }
   
@@ -171,8 +180,8 @@
   
   article.card .infos .txt img{
     position: absolute;
-    right: 0;
-    bottom: 0;
+    right: -30px;
+    bottom: -30px;
     width: 270px;
     z-index: -1;
   }
