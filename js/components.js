@@ -2,24 +2,46 @@
 class Countries {
     constructor(countries) {
         this.countries = countries;
-        this._addContainer();
-        this.arr = [];
+        this._addSection();
     }
 
-    _addContainer = function () {
+    _addSection() {
+        let sectionEl = document.createElement("section");
+        sectionEl.classList.add("countries");
+        document.body.insertAdjacentElement("afterbegin", sectionEl);
+
+        let inputBox = document.createElement("div");
+        inputBox.classList.add("input_box");
+        sectionEl.appendChild(inputBox);
+
+        let inputEl = document.createElement("input");
+        inputEl.classList.add("country_input");
+        inputEl.type = "text";
+        inputEl.name = "country-input";
+        inputEl.placeholder = "name...";
+        inputBox.appendChild(inputEl);
+
         this.box = document.createElement("div");
         this.box.classList.add("box");
-        document.querySelector(".input_box").insertAdjacentElement("afterend", this.box);
+        sectionEl.appendChild(this.box);
     }
+
     addCards = async function () {
         let tempArr = await this.countries;
-        let arr = [];
-        tempArr.forEach((el,index) => {
-            if(index < 10)
-            arr.push(this._cards({ ...el, ...el.media }))
-        });
-        this.arr = arr;
-        this.box.innerHTML = arr.join("")
+
+        let resultArr = this._getCountryCards(tempArr);
+        this.box.innerHTML = resultArr.join("");
+
+        this._filterItems(tempArr);
+    }
+
+    _getCountryCards = function (arr) {
+        let result = [];
+        arr.forEach((el, index) => {
+            // if (index < 10)
+            result.push(this._cards({ ...el, ...el.media }));
+        })
+        return result;
     }
 
     _cards = function ({ name, capital, abbreviation, currency, phone, population, flag, emblem, orthographic }) {
@@ -40,36 +62,22 @@ class Countries {
                         Phone: ${phone} <br>
                         Population: ${population}
                         <img src="${orthographic}"
-                            alt="img">
+                            alt="">
                     </p>
-
                 </div>
             </article>
-        `
+        `;
     }
 
-    filterItem() {
-        const inputEl = document.querySelector(".country_input")
-        inputEl.addEventListener("input", this.getItem)
+    _filterItems(countries) {
+        const inputEl = document.querySelector(".country_input");
+        inputEl.addEventListener("input", (e) => {
+            let inputValue = e.target.value.toLowerCase();
+            let resArr = countries.filter(country => country.name.toLowerCase().includes(inputValue));
+            this.box.innerHTML = this._getCountryCards(resArr).join("");
+        });
     }
-    getItem(e) {
-        const cards = document.querySelectorAll(".card");
-
-        // const titles = cards.querySelectorAll(".title");
-        cards.forEach(card => {
-
-            let title = card.querySelector(".title");
-
-            let tempTitle = title.textContent.toLowerCase();
-            let inputValue = e.srcElement.value.toLowerCase();
-
-            if (tempTitle.includes(inputValue)) {
-                
-            } else {
-                card.remove();
-            }
-        })
-    }
+    
 }
 
 export { Countries };

@@ -27,6 +27,7 @@
     max-width: 1270px;
     margin: 0 auto;
     padding: 50px 10px;
+    text-align: center;
   }
   .country_input{
     padding: 20px;
@@ -131,23 +132,13 @@
     text-shadow: 0 0 0px #32577f;
   }
   
-  article.card .infos .flag {
-    /* position: absolute;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-    width: 35px;
-    height: 23px;
-    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/397014/flag.png") no-repeat top right;
-    background-size: 100% auto;
-    display: inline-block; */
-  }
+
   
   article.card .infos .flag img{
     position: absolute;
     top: 0;
     right: 0;
-    width: 80px;
+    width: 60px;
     height: auto;
   }
   
