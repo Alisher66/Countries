@@ -32,13 +32,13 @@ class Countries {
         let resultArr = this._getCountryCards(tempArr);
         this.box.innerHTML = resultArr.join("");
 
-        this._filterItems(tempArr);
+        // this._filterItems(tempArr);
+        this._filterItems();
     }
 
     _getCountryCards = function (arr) {
         let result = [];
-        arr.forEach((el, index) => {
-            // if (index < 10)
+        arr.forEach(el => {
             result.push(this._cards({ ...el, ...el.media }));
         })
         return result;
@@ -46,7 +46,7 @@ class Countries {
 
     _cards = function ({ name, capital, abbreviation, currency, phone, population, flag, emblem, orthographic }) {
         return `
-            <article class="card">
+            <article class="card show">
                 <div class="thumb">
                     <img src="${emblem}"
                         alt="">
@@ -69,15 +69,33 @@ class Countries {
         `;
     }
 
-    _filterItems(countries) {
+    // _filterItems(countries) {
+    //     const inputEl = document.querySelector(".country_input");
+    //     inputEl.addEventListener("input", (e) => {
+    //         let inputValue = e.target.value.toLowerCase();
+    //         let resArr = countries.filter(country => country.name.toLowerCase().includes(inputValue));
+    //         this.box.innerHTML = this._getCountryCards(resArr).join("");
+    //     });
+    // }
+
+    _filterItems() {
+        const titles = document.querySelectorAll(".title");
         const inputEl = document.querySelector(".country_input");
+
         inputEl.addEventListener("input", (e) => {
             let inputValue = e.target.value.toLowerCase();
-            let resArr = countries.filter(country => country.name.toLowerCase().includes(inputValue));
-            this.box.innerHTML = this._getCountryCards(resArr).join("");
+            titles.forEach(title => {
+                let parrentEl =  title.closest(".card");
+                if(title.textContent.toLowerCase().includes(inputValue)) {
+                    parrentEl.classList.add("show");
+                    parrentEl.classList.remove("hide");
+                } else {
+                    parrentEl.classList.add("hide");
+                    parrentEl.classList.remove("show");
+                }
+            });
         });
     }
-    
 }
 
 export { Countries };
