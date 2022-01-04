@@ -24,6 +24,11 @@ class Countries {
         this.box = document.createElement("div");
         this.box.classList.add("box");
         sectionEl.appendChild(this.box);
+
+        this.paginationEl = document.createElement("div");
+        this.paginationEl.classList.add("pagination");
+        sectionEl.appendChild(this.paginationEl);
+
     }
 
     addCards = async function () {
@@ -34,6 +39,7 @@ class Countries {
 
         // this._filterItems(tempArr);
         this._filterItems();
+        
     }
 
     _getCountryCards = function (arr) {
@@ -82,11 +88,14 @@ class Countries {
         const titles = document.querySelectorAll(".title");
         const inputEl = document.querySelector(".country_input");
 
+        let items = document.querySelectorAll(".show");
+        this._pagination(items);
+
         inputEl.addEventListener("input", (e) => {
             let inputValue = e.target.value.toLowerCase();
             titles.forEach(title => {
-                let parrentEl =  title.closest(".card");
-                if(title.textContent.toLowerCase().includes(inputValue)) {
+                let parrentEl = title.closest(".card");
+                if (title.textContent.toLowerCase().includes(inputValue)) {
                     parrentEl.classList.add("show");
                     parrentEl.classList.remove("hide");
                 } else {
@@ -94,8 +103,62 @@ class Countries {
                     parrentEl.classList.remove("show");
                 }
             });
+            
+            items = document.querySelectorAll(".show");
+            this._pagination(items);
         });
     }
+
+    _pagination(items) {
+        this._generateLinks(items);
+        const paginationLinks = document.querySelectorAll(".pagination a");
+        this._showItems(items, 0);
+        this._getActive(paginationLinks, 0);
+
+        paginationLinks.forEach((link, index, arr) => {
+            link.addEventListener("click", (e) => {
+                this._getActive(arr, index);
+                this._showItems(items, index);
+            })
+        })
+    }
+
+
+    _showItems(items, i) {
+        items.forEach((item, index) => {
+            if (i * 10 <= index && index < (i + 1) * 10) {
+                item.classList.add("show");
+                item.classList.remove("hide");
+            } else {
+                item.classList.add("hide");
+                item.classList.remove("show");
+            }
+        });
+    }
+
+    _getActive(links, i) {
+        links.forEach((link, index) => {
+            link.classList.remove("active");
+            if(index == i) {
+                link.classList.add("active");
+            }
+        });
+    }
+    _generateLinks(items) {
+        let html = "";
+        let i = Math.ceil(items.length/10);
+
+        if(i <= 1) {
+            this.paginationEl.innerHTML = html;
+            return;
+        }
+        for(let k = 1; k <= i; k++) {
+            html +=`<a href="#">${k}</a>\n`;
+        }
+        this.paginationEl.innerHTML = html;
+    }
+
+
 }
 
 export { Countries };
