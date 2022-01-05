@@ -9,6 +9,7 @@ class Countries {
         let sectionEl = document.createElement("section");
         sectionEl.classList.add("countries");
         document.body.insertAdjacentElement("afterbegin", sectionEl);
+        
 
         let inputBox = document.createElement("div");
         inputBox.classList.add("input_box");
@@ -39,7 +40,7 @@ class Countries {
 
         // this._filterItems(tempArr);
         this._filterItems();
-        
+
     }
 
     _getCountryCards = function (arr) {
@@ -103,9 +104,10 @@ class Countries {
                     parrentEl.classList.remove("show");
                 }
             });
-            
+
             items = document.querySelectorAll(".show");
             this._pagination(items);
+            
         });
     }
 
@@ -114,11 +116,12 @@ class Countries {
         const paginationLinks = document.querySelectorAll(".pagination a");
         this._showItems(items, 0);
         this._getActive(paginationLinks, 0);
-
+        this._toCut();
         paginationLinks.forEach((link, index, arr) => {
             link.addEventListener("click", (e) => {
                 this._getActive(arr, index);
                 this._showItems(items, index);
+                this._toCut();
             })
         })
     }
@@ -139,25 +142,75 @@ class Countries {
     _getActive(links, i) {
         links.forEach((link, index) => {
             link.classList.remove("active");
-            if(index == i) {
+            if (index == i) {
                 link.classList.add("active");
             }
         });
     }
     _generateLinks(items) {
         let html = "";
-        let i = Math.ceil(items.length/10);
+        let i = Math.ceil(items.length / 10);
 
-        if(i <= 1) {
+        if (i <= 1) {
             this.paginationEl.innerHTML = html;
             return;
         }
-        for(let k = 1; k <= i; k++) {
-            html +=`<a href="#">${k}</a>\n`;
+        for (let k = 1; k <= i; k++) {
+            html += `<a href="#">${k}</a>\n`;
         }
         this.paginationEl.innerHTML = html;
     }
 
+    _toCut() {
+        let more1 = document.createElement("p");
+        more1.classList.add("more");
+        more1.textContent = ". . . .";
+
+        let more2 = document.createElement("p");
+        more2.classList.add("more");
+        more2.textContent = ". . . .";
+
+
+        let linkEl = document.querySelector(".pagination").children;
+        let arr = document.querySelectorAll(".pagination>a");
+    
+        for (let i = 0; i < linkEl.length; i++) {
+            if(linkEl[i].classList.contains("more")) {
+                linkEl[i].remove();
+            }
+        }
+
+        let index;
+        for (let i = 0; i < linkEl.length; i++) {
+            if (linkEl[i].classList.contains("active")) {
+                index = i;
+            }
+        }
+
+        for (let i = 0; i < arr.length; i++) {
+            if (index - 2 > i || index + 2 < i) {
+                arr[i].classList.add("hide");
+                arr[i].classList.remove("show");
+            } else {
+                arr[i].classList.add("show");
+                arr[i].classList.remove("hide");
+            }
+
+            if (i == arr.length - 1 || i == arr.length - 2 || i == 0 || i == 1) {
+                arr[i].classList.add("show");
+                arr[i].classList.remove("hide");
+            }
+        }
+
+        if (index >= 5) {
+            arr[index].previousElementSibling.previousElementSibling.insertAdjacentElement("beforebegin", more1);
+        }
+        if (index <= arr.length-5) {
+            arr[index].nextElementSibling.nextElementSibling.insertAdjacentElement("afterend", more2);
+        }
+        
+    }
+    
 
 }
 
